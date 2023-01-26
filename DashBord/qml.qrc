@@ -1,0 +1,35 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>DataDisplay.qml</file>
+        <file>dashBackground.jpg</file>
+        <file>displayBackgroundimg.jpg</file>
+        <file>speedimg.png</file>
+        <file>needleimg.jpg</file>
+        <file>StatusBar.qml</file>
+        <file>needlesmall.jpg</file>
+        <file>50fuel.png</file>
+        <file>70fuel.png</file>
+        <file>90fuel.png</file>
+        <file>10fule.png</file>
+        <file>100fuel.png</file>
+        <file>petrolmeter.png</file>
+        <file>petorl_needle.jpg</file>
+        <file>empty.png</file>
+        <file>leftindicator.png</file>
+        <file>rigtIndicator.png</file>
+        <file>carimage.png</file>
+        <file>lightimg.png</file>
+        <file>tempsymbol.png</file>
+        <file>parking.png</file>
+        <file>timesymbol.png</file>
+        <file>temphotsymbol.png</file>
+        <file>cooltempsymbol.png</file>
+        <file>parking_orange.png</file>
+        <file>batery.png</file>
+        <file>seatbelt.png</file>
+        <file>sitbeltwear.png</file>
+        <file>rightindicator_yellowcolor.png</file>
+        <file>leftindicatorredcolor.png</file>
+    </qresource>
+</RCC>
