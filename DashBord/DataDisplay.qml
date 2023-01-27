@@ -2,8 +2,6 @@ import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Controls
-//import QtQuick.Controls  1.4
-//import Qt5Compat.GraphicalEffects
 Item {
     id: item1
     x:20
@@ -13,7 +11,7 @@ Item {
     visible: true
 
     property int needleAngle:-50
-     property int smallneedle:-50
+    property int smallneedle:-50
     property int speeddisp
     property int petrol:250
     property int digitalDAta
@@ -21,24 +19,24 @@ Item {
     property int minut:0
     property int hours:0
     property int tempchecking:22
-
     property int parkingpropety
-      property int f
-     property int ri
-     property int i:0
+    property int f
+    property int ri
+    property int i:0
     property int s:0
     property int li
-  property int j:0
+    property int j:0
+    property string petroldigit:"1"
+    property int sitf:0
 
 
     Connections{
- target:mainAccess
- onLtLeftINdicatorsignal:{
-
-     console.log(leftind)
-     li=leftind
- }
-    }
+        target:mainAccess
+         onLtLeftINdicatorsignal:{
+       //console.log(leftind)
+        li=leftind
+          }
+      }
 
 
     Connections{
@@ -93,7 +91,7 @@ Item {
             }
         }
 
-    }
+      }
     }
 
     Connections{
@@ -102,6 +100,11 @@ Item {
             onPetrolSend:
             {
                 petrol=Data3
+                if(petrol<=185)
+                    petroldigit="1/5"
+                 if(petrol<=112)
+                    petroldigit="0"
+             //    console.log(petrol)
             }
     }
 
@@ -134,7 +137,10 @@ Item {
     onSpeedDigitalmeter:
     {
   //  console.log(DigitalData)
+        if(petrol>=110)
     digitalDAta=DigitalData
+        else
+            digitalDAta--
     }
 
     }
@@ -189,10 +195,10 @@ Item {
                 height: 5
                 source: "needlesmall.jpg"
                 transform: Rotation{origin.x:100;origin.y:1.1;
-                 angle: Math.min(Math.max(smallneedle,-50),235)//}
-//                Behavior on angle {
-//                SpringAnimation{spring: 2;damping: 0.2;mass: 3;}
-//                 }
+                 angle: Math.min(Math.max(smallneedle,-50),235)
+                Behavior on angle {
+                SpringAnimation{spring: 2;damping: 0.2;mass: 3;}
+                 }
             }
 
 }
@@ -211,7 +217,7 @@ Item {
             y:45
             width: 300
             height: 300
-            source: "speedimg.png"
+            source: "rpmImage.png"
         }
 
 
@@ -225,9 +231,9 @@ Item {
             rotation: 0
             transform: Rotation{origin.x:100;origin.y:1;
                 angle: Math.min(Math.max(needleAngle),235)
-//                                 Behavior on angle {
-//                                 SpringAnimation{spring: 2;damping: 0.2;mass: 3;}
-//                                  }
+                                 Behavior on angle {
+                                 SpringAnimation{spring: 2;damping: 0.2;mass: 3;}
+                                  }
 
             }
 
@@ -239,8 +245,8 @@ Item {
             y: 8
             width: 97
             height: 31
-            color: "red"
-            text:"TET:"+hours+":"+ minut+":"+totatalEntime//qsTr("TotalET:")
+            color: "yellow"
+            text:"TET:"+hours+":"+ minut+":"+totatalEntime
             font.pixelSize: 20
         }
 
@@ -250,14 +256,13 @@ Item {
             y: 14
             width: 55
             height: 20
-           //  color: "white"
             source:
                 {
                 if(tempchecking<=24)
                 {
                     return "tempsymbol.png"
                 }
-            else if(tempchecking<26)
+            else if(tempchecking<=26)
                 {
                     return "cooltempsymbol.png"
                 }
@@ -331,16 +336,16 @@ Item {
 
     Image {
         id:needlepetrol
-       x:322
-       y:505
+       x:314
+       y:501
         width: 5
         height: 100
         source: "petorl_needle.jpg"
         transform: Rotation{
             angle: Math.min(Math.max(petrol,110))
-//            Behavior on angle {
-//            SpringAnimation{spring: 2;damping: 0.2;mass: 3;}
-//             }
+            Behavior on angle {
+            SpringAnimation{spring: 2;damping: 0.2;mass: 3;}
+             }
 
         }
 
@@ -348,11 +353,59 @@ Item {
 
 
     Image {
+        id: car
+        x:220
+        y:484
+        width: 33
+        height: 30
+        source:{
+         if(petrol>=130)
+            return "carimageBlack.png"
+            else
+             return "carimage.png"
+        }
+
+        SequentialAnimation{
+        loops: Animation.Infinite
+        running: true
+        OpacityAnimator{
+        target: car
+        from: 0
+        to:1
+        duration: 1000
+        }
+
+        }
+    }
+
+
+    Rectangle{
+    x:307
+    y:430
+    width: 30
+    height: 30
+    color: "yellow"
+    Text {
+        id: petrolDIGIT
+        //width: 30
+       // height: 30
+        text:petroldigit
+        font.pixelSize:  20
+        anchors.centerIn: parent
+    }
+    gradient: Gradient {
+          GradientStop { position: 0.0; color: "red" }
+          GradientStop { position: 0.33; color: "yellow" }
+          GradientStop { position: 1.0; color: "green" }
+      }
+    }
+
+    Image {
         id: petrol_100
-        x:238
-        y:470
-        width: 20
-        height: 35
+        x:265
+        y:484
+        width: 29
+        height: 29
          source:{
 
                 if(petrol>=220)
@@ -403,7 +456,7 @@ Rectangle
             return "rigtIndicator.png"
         else
             return "rightindicator_yellowcolor.png"
-        }// "rigtIndicator.png"
+        }
       }
 
 
@@ -522,7 +575,7 @@ Rectangle
         y: 0
         width: 60
         height: 64
-        source: //"parking.png"
+        source:
         {
 
       if(f%2==0)
@@ -539,18 +592,54 @@ Rectangle
         onClicked: {
             if(s==0){
             mainAccess.starttimer()
-       //  anim.running = true;
-                s=1;
+                 mainAccess.letstartRightindicator()
+                 mainAccess.letstratLeftindicator()
+                s=1;i=1;j=1;
         }
             else
             {
                 mainAccess.setpar()
-                s=0;
+                 mainAccess.letStopLeftindicator()
+                 mainAccess.letstoprigtindicator()
+                s=0;i=0;j=0;
             }
 
         }
     }
 
+}
+
+Rectangle{
+    id:absrec
+    x:576
+    y:309
+    width: 35
+    height: 32
+    radius: width
+Image {
+    id: abs
+  //  x:263
+   // y:54
+    width: 35
+    height: 32
+    source: "absCar.png"
+}
+
+MouseArea{
+ anchors.fill: parent
+onClicked: {
+    if(sitf==1)
+    {
+    mainAccess.absstoppedcar()
+    mainAccess.letstartRightindicator()
+    mainAccess.letstratLeftindicator()
+   // mainAccess.notifyPetrol()
+    }
+    else
+        absbraek.open()
+}
+
+}
 }
 
 
@@ -573,16 +662,133 @@ Image {
     MouseArea{
     anchors.fill: parent
     onClicked: {
-        //sitbeltimg.running=true
-    sitbeltimg.source="sitbeltwear.png"
+        sitf=1
+       sitbeltimg.source="sitbeltwear.png"
 
     }
 
     }
 }
 
+Popup{
+id:absbraek
+x:250
+y:300
+height: 100
+width: 200
+
+background: Rectangle{color: "silver"}
+
+Label{
+id:labelAbs
+width: 100
+height: 30
+text: "Wear Seat Blet"
+font.pixelSize: 15
+color: "blue"
+Button{
+    x: 50
+    y:40
+    width: 60
+    height: 40
+    text:"CLose"
+    background: Rectangle {
+        color: parent.pressed ? "red" : "green"
+}
+
+onClicked: {absbraek.close()}
+}
+}
+}
+
+
+
+
+Rectangle{
+    id:priperec
+    x:360
+    y:492
+    width: 35
+    height: 32
+    color: "black"
+Image {
+    id: petolpip
+    width: 35
+    height: 32
+    source:{
+        if(petrol==110)
+       return "petrolpipe.png"
+        else
+            return "petrolpipeBlack.png"
 
     }
+}
+
+MouseArea{
+ anchors.fill: parent
+onClicked: {
+
+        fillPetrol.open()
+    mainAccess.fillpetroll()
+}
+
+}
+}
+
+
+
+
+
+Popup{
+id:fillPetrol
+
+x:250
+y:300
+height: 100
+width: 150
+
+background: Rectangle{color: "silver"}
+
+Label{
+id:labelfillpetrol
+width: 100
+height: 30
+text: "Fill Petrol Clik on OK"
+font.pixelSize: 15
+color: "blue"
+Button{
+    x: 50
+    y:40
+    width: 60
+    height: 40
+    text:"OK"
+    background: Rectangle {
+        color: parent.pressed ? "red" : "green"
+}
+
+onClicked: {
+    fillPetrol.close()
+    mainAccess.mainclikedbuttonTIMERSSTARTING()
+    petrol=110
+    petroldigit="1"
+
+}
+}
+
+}
+
+
+}
+
+
+
+
+    }
+    states: [
+        State {
+            name: "State1"
+        }
+    ]
 
 
 

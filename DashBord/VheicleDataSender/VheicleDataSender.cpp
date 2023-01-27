@@ -6,10 +6,13 @@ static int Digitalspeed;
 static int totalETs;
 static int totalETm;
 static int totalETh;
-int z=-50,k=0,par=0,ri=0,li=0;
+int z=-50,k=0,par=0,ri=0,li=0,ab=0,d=0;
 VheicleDataSender::VheicleDataSender(QObject *parent) :QObject(parent)
   ,m_check("345")
 {
+
+    forDialmain->start(30);
+    connect(forDialmain,&QTimer::timeout,this,&VheicleDataSender::notifyDialsugnal);
    //speedTime->setInterval(50);
 // speedTime->start(500);
 //speedRMP->start(500);
@@ -56,20 +59,23 @@ else
 
 void VheicleDataSender::notifyrpm()
 {
-  //  qDebug()<<"called rpm";
+
     RPM=RPM+1;
-    QString s=QString::number(RPM);
-if(PETROL<110)
+QString s=QString::number(RPM);
+if(PETROL<=110)
 {
+
      RPM=RPM-1;
-   // QString p=QString::number(z);
-  //  QString s=QString::number(RPM);
-     // QString s=QString::number(speed);
-     emit rpm(QVariant(s));
+    QString r=QString::number(RPM);
+    emit rpm(QVariant(r));
+
+     if(RPM==-50)
+      speedRMP->stop();
 
 }
-else if(RPM>=235)
+else if(RPM>=235|RPM==-50)
 {
+     qDebug()<<"stoped rpm";
      speedRMP->stop();
 }
 else
@@ -78,18 +84,39 @@ else
 
 void VheicleDataSender::notifyPetrol()
 {
-   // qDebug()<<"petrol";
-    PETROL=PETROL-0.5;
+
+    PETROL=PETROL-1;
     QString s=QString::number(PETROL);
 
-//qDebug()<<"petrol->"<<PETROL;
-    if(PETROL==0|PETROL<110)
+    if(PETROL==100|PETROL<110)
     {
+       // ab=1;
+        qDebug()<<ab;
+        speedTime->start(50);
+       speedRMP->start(50);
+        SpeedDigital->start(50);
+          speedPetrol->start(30);
+              Digitalspeed=Digitalspeed-1;
+              RPM=RPM-1;
+              speed=speed-1;
+               QString sp=QString::number(speed);
+             QString r=QString::number(RPM);
+        QString s=QString::number(Digitalspeed);
+        emit send(QVariant(sp));
+         emit speedDigitalmeter(QVariant(s));
+        emit rpm(QVariant(r));
+
+        if(speed==-50)
+              speedTime->stop();
+         if(RPM==-50)
+          speedRMP->stop();
+        if(Digitalspeed<=0)
         speedPetrol->stop();
 
     }
-    else
-     emit petrolSend(QVariant(s));
+
+   else
+        emit petrolSend(QVariant(s));
 
 }
 
@@ -97,22 +124,23 @@ void VheicleDataSender::notifyDigitalMeter()
 {
 Digitalspeed=Digitalspeed+1;
 QString h="285";
-//QString l="0";
 QString s=QString::number(Digitalspeed);
-if(PETROL<=110)
+if(PETROL<=109)
 {
+    //  qDebug()<<"petrol dital";
     Digitalspeed=Digitalspeed-1;
     QString s=QString::number(Digitalspeed);
-  //  QString p=QString::number(k);
-    emit speedDigitalmeter(QVariant(s));
-
+     emit speedDigitalmeter(QVariant(s));
+ if(Digitalspeed<=0)
     SpeedDigital->stop();
 }
 else if(Digitalspeed>284){
   emit speedDigitalmeter(QVariant(h));
+    qDebug()<<" dital stopespped";
 SpeedDigital->stop();
 }
-    else
+
+   else
     emit speedDigitalmeter(QVariant(s));
 }
 
@@ -144,7 +172,7 @@ void VheicleDataSender::notifyemptypetrooltank()
 {
     if(PETROL<=110)
     {
-        RPM=RPM-1;
+             RPM=RPM-1;
      QString s=QString::number(RPM);
          emit emptypetrolatank(QVariant(s));
     }
@@ -209,6 +237,19 @@ void VheicleDataSender::notifyltLeftINdicatorsignal()
     }
 }
 
+void VheicleDataSender::notifyDialsugnal()
+{
+    if(d==100)
+    {
+        forDialmain->stop();
+    }
+    else
+    {
+    emit forrunDialsignal(int (d++));
+    //qDebug()<<d;
+    }
+}
+
 void VheicleDataSender::starttimer()
 {
     qDebug()<<"caleed";
@@ -248,14 +289,57 @@ void VheicleDataSender::mainclikedbuttonTIMERSSTARTING()
 {
     speedTime->start(500);
    speedRMP->start(500);
-   speedPetrol->start(2000);
+   speedPetrol->start(200);
    SpeedDigital->start(500);
    TotalETime->start(1000);
+}
+
+void VheicleDataSender::absstoppedcar()
+{
+    qDebug()<<"called";
+
+//    disconnect(speedTime,&QTimer::timeout,this,&VheicleDataSender::NotifySignalSpeedslots);
+//    disconnect(speedRMP,&QTimer::timeout,this,&VheicleDataSender::notifyrpm);
+//    disconnect(speedPetrol,&QTimer::timeout,this,&VheicleDataSender::notifyPetrol);
+//    disconnect(SpeedDigital,&QTimer::timeout,this,&VheicleDataSender::notifyDigitalMeter);
+//     speed=-50;
+//       Digitalspeed=0;
+//        RPM=-50;
+
+
+
+    if(ab==0)
+    {
+       ab=1;
+       // qDebug()<<ab;
+                     QString sp=QString::number(-50);
+             QString r=QString::number(-50);
+        QString s=QString::number(0);
+        emit send(QVariant(sp));
+         emit speedDigitalmeter(QVariant(s));
+        emit rpm(QVariant(r));
+
+        speedRMP->stop();
+        speedPetrol->stop();
+         SpeedDigital->stop();
+          speedTime->stop();
+
+    }
+
+
+
+
+
 }
 
 void VheicleDataSender::setpar()
 {
     par=0;
+}
+
+void VheicleDataSender::fillpetroll()
+{
+PETROL=250;
 }
 QString VheicleDataSender::check() const
 {

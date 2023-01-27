@@ -9,6 +9,21 @@ Window {
     visible: true
    // color: "black"
     title: qsTr("dd")
+    maximumHeight: 520
+    maximumWidth: 600
+
+    property int drun
+
+
+    Connections{
+    target: mainAccess
+    onForrunDialsignal:{
+  // console.log(d);
+        drun=d
+    }
+
+    }
+
     Image {
       //  width: 600
       //  height: 520
@@ -19,6 +34,38 @@ Window {
         height: 530
         //anchors.fill: root
         source: "dashBackground.jpg"
+        ProgressBar{
+        id:myprogress
+        x:0
+        y:4
+        height: 20
+        width: 700
+//        Text {
+//            id: progessbartext
+//            x:0
+//            y:4
+//            text: qsTr("loading")
+//        }
+        from: mydial.from
+        to:mydial.to
+        value: mydial.value
+        }
+
+
+            Dial{
+            id:mydial
+            width: 1
+            height: 1
+           x:0
+            y:0
+           // anchors.centerIn: parent
+            from:0
+            to:110
+            value: drun
+
+            }
+
+
     }
 
 
@@ -48,7 +95,9 @@ StackView
             border.width: 5
             border.color: "blue"
             radius: 260
-            Text {
+
+
+                 Text {
                 id: id_start
                 font.bold: true
                 font.pixelSize:  40
@@ -62,6 +111,9 @@ StackView
                   GradientStop { position: 1.0; color: "green" }
               }
 
+
+
+
            MouseArea{
                anchors.fill: parent
                anchors.rightMargin: -5
@@ -69,8 +121,12 @@ StackView
                anchors.leftMargin: -5
                anchors.topMargin: 0
                onClicked:{
+                  // mainAccess.notifyDialsugnal();
+                   if(drun>=99)
+                   {
               id_stack.replace("DataDisplay.qml")
               mainAccess.mainclikedbuttonTIMERSSTARTING()
+                   }
            }
 
 

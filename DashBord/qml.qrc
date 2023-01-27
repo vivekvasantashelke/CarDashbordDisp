@@ -31,5 +31,10 @@
         <file>sitbeltwear.png</file>
         <file>rightindicator_yellowcolor.png</file>
         <file>leftindicatorredcolor.png</file>
+        <file>carimageBlack.png</file>
+        <file>absCar.png</file>
+        <file>petrolpipe.png</file>
+        <file>petrolpipeBlack.png</file>
+        <file>rpmImage.png</file>
     </qresource>
 </RCC>

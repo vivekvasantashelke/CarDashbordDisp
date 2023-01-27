@@ -39,6 +39,9 @@ signals:
 
     void ltLeftINdicatorsignal(int leftind);
 
+    void forrunDialsignal(int d);
+
+
 private slots:
 
     void NotifySignalSpeedslots();
@@ -55,6 +58,8 @@ private slots:
 
   void notifyltLeftINdicatorsignal();
 
+  void notifyDialsugnal();
+
 public slots:
     void stopedtimer();
 
@@ -69,7 +74,10 @@ void letstratLeftindicator();
 
  void mainclikedbuttonTIMERSSTARTING();
 
+ void absstoppedcar();
+
  void setpar();
+ void fillpetroll();
 
 
 private :
@@ -85,6 +93,8 @@ private :
 
     QTimer *letRightind=new QTimer(this);
     QTimer *letLeftIND=new QTimer(this);
+
+    QTimer *forDialmain=new QTimer(this);
 
     QString m_check;
 };
